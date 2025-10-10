@@ -31,8 +31,8 @@ class AudioPreprocessor:
         if len(trimmedAudio) == 0:
             return audio
         return trimmedAudio
-    def preprocessAudioGivenPath(autioPath, desiredSR, topDB):
-        if path.exists(autioPath):
+    def preprocessAudioGivenPath(audioPath, desiredSR, topDB):
+        if path.exists(audioPath):
             audio = AudioPreprocessor.loadAudio(audio, desiredSR)
             if audio:
                 audio = AudioPreprocessor.cleanAudio(audio, topDB)
