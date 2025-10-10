@@ -2,6 +2,7 @@ from transformers import DistilBertTokenizer, DistilBertModel
 import torch
 import numpy as np
 import librosa
+from typing import Optional, List, Dict, Tuple
 
 class TextFeatureExtractor:
     # Text feature extraction via DistilBERT
@@ -156,7 +157,46 @@ class AudioFeatureExtractor:
 class MultimodalFeatureExtractor:
     # Main feature extraction combining text and audio
 
-    def extract_features(self, sample, dialogue_history=None):
+    def __init__(self):
+        self.text_extractor = TextFeatureExtractor()
+        self.audio_extractor = AudioFeatureExtractor()
+
+
+    def extract_features(self, sample: Dict, dialogue_history: Optional[List[str]] = None) -> Dict[str, np.ndarray]:
         features = {}
+
+        # TEXT FEATURE EXTRACTION
+        text_input = sample.get('tokenized_text')
+
+        # extract text features with or without dialogue context
+        if dialogue_history and len(dialogue_history) > 0:
+            features['text'] = self.text_extractor.get_contextual_embeddings(
+                text_input, dialogue_history
+            )
+        else:
+            features['text'] = self.text_extractor.get_utterance_embedding(text_input)
+
+        # AUDIO FEATURE EXTRACTION
+        processed_audio = sample.get('processed_audio')
+        
+        if processed_audio is not None:
+            # AudioPreprocessor returns (audio_data, sample_rate)
+            if isinstance(processed_audio, tuple) and len(processed_audio) == 2:
+                audio, sr = processed_audio
+            else:
+                # use default sample rate if it's just the audio array
+                audio = processed_audio
+                sr = 16000
+            
+            features['audio'] = self.audio_extractor.extract_audio_features(audio, sr)
+        else:
+            # use zero vector for missing or failed audio
+            features['audio'] = np.zeros(168)
+        
+        # REAL STUFF
+        features['multimodal'] = np.concatenate([
+            features['text'],   # 768 dimensions
+            features['audio']   # 168 dimensions
+        ])
 
         return features
