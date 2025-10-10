@@ -6,7 +6,7 @@ import librosa
 class TextFeatureExtractor:
     # Text feature extraction via DistilBERT
 
-    def __init__(self, model_name='distillbert-base-uncased'):
+    def __init__(self, model_name='distilbert-base-uncased'):
         self.tokenizer = DistilBertTokenizer.from_pretrained(model_name)
         self.model = DistilBertModel.from_pretrained(model_name)
         self.model.eval()
