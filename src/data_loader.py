@@ -80,7 +80,7 @@ class MELDDataset(Dataset):
         # Return None if no audio file found (some utterances may not have audio)
         return None
     
-    def getitem(self, idx):
+    def __getitem__(self, idx):
         """
         Retrieve a single data sample from the dataset.
         """
