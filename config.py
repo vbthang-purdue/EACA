@@ -6,6 +6,7 @@ class Config:
     DATA_DIR = "data/meld"
     RAW_DATA_DIR = "data/meld/raw"
     PROCESSED_DATA_DIR = "data/processed"
+    FEATURES_DIR = "data/features"
     
     # CSV files
     TRAIN_CSV = os.path.join(DATA_DIR, "train_sent_emo.csv")
@@ -17,8 +18,10 @@ class Config:
     DEV_VIDEO_DIR = os.path.join(DATA_DIR, "dev_splits_complete")
     TEST_VIDEO_DIR = os.path.join(DATA_DIR, "output_repeated_splits_test")
     
-    # Audio directories
-    AUDIO_DIR = os.path.join(PROCESSED_DATA_DIR, "audio")
+    # Feature directories
+    TEXT_FEATURES_DIR = os.path.join(FEATURES_DIR, "text")
+    AUDIO_FEATURES_DIR = os.path.join(FEATURES_DIR, "audio")
+    MULTIMODAL_FEATURES_DIR = os.path.join(FEATURES_DIR, "multimodal")
     
     # Model parameters
     BATCH_SIZE = 32
@@ -41,3 +44,7 @@ class Config:
     # Sentiment labels
     SENTIMENT_LABELS = ['positive', 'negative', 'neutral']
     SENTIMENT_MAP = {sentiment: idx for idx, sentiment in enumerate(SENTIMENT_LABELS)}
+    
+    # Feature extraction settings
+    SAVE_FORMAT = "pickle"  # or "numpy"
+    VERBOSE = True

@@ -124,3 +124,12 @@ CONTRACTION_MAP = {
     "you're": "you are",
     "you've": "you have"
 }
+
+def expand_contractions(text):
+    """Expand contractions in text using the contraction map."""
+    if not isinstance(text, str):
+        return ""
+    
+    for contraction, expansion in CONTRACTION_MAP.items():
+        text = text.replace(contraction, expansion)
+    return text
